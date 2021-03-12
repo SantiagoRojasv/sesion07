@@ -36,6 +36,9 @@
         //var R_key = false;
 		var object, transf = 'T';
         var angulo = 1 * Math.PI/180; //Variable ángulo de rotación
+        //var xAxis = true;
+		//var yAxis = false;
+		//var zAxis = false;
 		init();
 		animate();
 	
@@ -101,6 +104,7 @@
 				homeKey = false;
 				endKey = false;
                 R_key = false;
+                
 			};	  	
 			
 			document.addEventListener( 'keydown', onKeyDown, false );
@@ -187,16 +191,18 @@
         var dtime = Date.now()-startTime;
 		var tx=0, ty=0, tz=0;
         var sc = 1;	//Variable de escala
-        angulo = 0.1;
+
         
  
 		if(transf == 'E')
         {
 			tx=1; ty=1; tz=1;
 		}
+            
+            
 		if(upArrow) 
         {
-			ty = (transf == 'T' ? 1 : transf == 'E' ? 1.1 : transf == 'R' ? angulo : 0);
+			ty = (transf == 'T' ? 1 : transf == 'E' ? 1.1 : transf == 'R' /*o R_key?*/ ? angulo : 0);
             
             
 		}
@@ -249,17 +255,35 @@
 					0, ty, 0, 0, 
 					0, 0, tz, 0,
 					0, 0, 0, 1);
-        
-        
+            
+            
+        //Quiza creando varibles auxiliares me faciliten una mayor facilidad para poder rotar el objeto
+        //switch(ejes) estaba pensando si crear un switch para intentar facilitar el cambio de ejes
+        //Colo que unos else if, pero siento que no serviran de nada.
+            //case 0: eje = x;
 		if(transf == 'R')  //Crear la matriz de rotación // La matriz queda rotando infinitamente
 			t.set( 1,  0,  0, 0,
 					0, cos_a,-sin_a, 0, 
 					0, sin_a, cos_a, 0,
-					0,  0,  0, 1);		
+					0,  0,  0, 1);
+            //break;
+            
+            //case 1: eje = y;
+        else if(transf == 'R')
+            t.set( cos_a, 0, sin_a, 0,
+					 0, 1,  0, 0, 
+				   -sin_a, 0, cos_a, 0,
+					 0, 0,  0, 1 );		
+		     //break;
+            
+		    //case 2: eje = z;
+		else if (transf == 'R')
+			t.set( cos_a,-sin_a, 0, 0,
+				    sin_a, cos_a, 0, 0, 
+					 0,  0, 1, 0,
+					 0,  0, 0, 1 );		
+            //break;
 
-		
-		
-				
         
         
 		object.applyMatrix(t);				//Aplicar la matriz de transformación al objeto				
